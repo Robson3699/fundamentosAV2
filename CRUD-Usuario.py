@@ -1,8 +1,6 @@
 import json
 import os
 ##from time import sleep
-
-
 class cor:
     VERMELHO = '\033[91m'
     VERDE = '\033[92m'
@@ -12,10 +10,8 @@ class cor:
     CIANO = '\033[96m'
     RESET = '\033[0m'
 
-
 # Definindo o caminho do arquivo no escopo global
 arquivo = os.path.join(os.path.dirname(__file__), 'usuarios.json')
-
 
 def carregar_usuarios():
     # Verifica se o arquivo existe, se não existir, cria um arquivo com lista vazia
@@ -111,7 +107,7 @@ def menu_inicial():
     print(cor.CIANO + "=" *55 + cor.RESET)
     print(cor.VERMELHO + " ---->>> BEM VINDO AO SISTEMA MERCADO CLEAN <<<---- ")
     print("          1 - MÓDULO USUÁRIO ")
-    print("          2 - MÓDULO ESTOQUE ")
+    print("          2 - MÓDULO CARRO ")
     print("          3 - SAIR ")
     print(cor.CIANO + "=" *55 + cor.RESET)
     
