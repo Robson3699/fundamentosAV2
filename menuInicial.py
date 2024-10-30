@@ -1,5 +1,5 @@
 import carro
-import Usuario
+import usuario
 
 
 class cor:
@@ -26,12 +26,12 @@ def menu_inicial():
     
 while True:
         menu_inicial()
-        op=input("digite sua opcao")
+        op=input("DIGITE SUA OPCAO: ")
         match op:
          case "1":
           carro.main_carro()
          case "2":
-          Usuario.main_usuario()
+          usuario.main_usuario()
          case "3":
               break
         
