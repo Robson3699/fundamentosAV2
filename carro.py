@@ -216,7 +216,7 @@ def main():
                             os.system('cls')
                        
                         else:
-                            modelo = input(" 🦽 DIGITE O MODELO:\n>>> ")
+                            modelo = input(" 🦽 DIGITE O MODELO:\n>>> ").lower()
                             kilometragem = input("⏱ DIGITE A KILOMETRAGEM ATUAL:\n>>> ")
                             carregar_carros(placa, modelo, kilometragem)
                            
