@@ -138,9 +138,7 @@ def main_usuario():
 
         match (opcao_inicial):
             case 2:
-                carro.main_carro()
-                
-
+                carro.main_carro()                
             case 1:
                 while True: 
                     exibir_menu_usuario()
