@@ -147,7 +147,14 @@ def main_usuario():
                     if opcao == "1":
                         os.system('cls')
                         print("ADICIONANDO USUARIO\n")
-                        nome = input(" DIGITE O NOME:\n>>>").lower()
+                        nome = input(" DIGITE O NOME:\n>>>").upper()
+                        try:
+                            nome_float=float(nome)
+                            print("Digite um nome valido")
+                            break
+                        except:
+                            ...
+                        
                         idade = input(" DIGITE A IDADE:\n>>>")
                         idade_int=int(idade)
                         if idade_int<18:
@@ -172,14 +179,14 @@ def main_usuario():
                          cpf_antigo = input(cor.VERMELHO+"DIGITE O CPF A SER ATUALIZADO:\n>>>"+cor.RESET)
                          if buscar_usuario(cpf_antigo) == False:
                              break
-                         novo_nome = input("DIGITE O NOVO NOME:\n>>>").lower()
+                         novo_nome = input("DIGITE O NOVO NOME:\n>>>").upper()
                          nova_idade = input("DIGITE A NOVA IDADE:\n>>>")
                          nova_idade_int=int(nova_idade)
                          if nova_idade_int<18:
                              print("IDADE MENOR QUE 18 ANOS")
                              break
                          novo_cpf = input(cor.VERMELHO+"DIGITE O NOVO CPF:\n>>>"+cor.RESET)
-                         novo_endereco = input("DIGITE O NOVO ENDERECO:\n>>>").lower()
+                         novo_endereco = input("DIGITE O NOVO ENDERECO:\n>>>").upper()
                          novo_tel = input("DIGITE O NOVO TELEFONE:\n>>>")
                          atualizar_usuario(cpf_antigo, novo_nome, nova_idade, novo_cpf,novo_endereco,novo_tel)
                     elif opcao == "4":
