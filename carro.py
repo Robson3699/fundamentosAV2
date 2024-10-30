@@ -185,7 +185,7 @@ def match_2():
                                 os.system('cls')
 
 
-def main():
+def main_carro():
     
     while True:
         menu_inicial()
@@ -288,4 +288,4 @@ def main():
                 print("❌ OPÇÃO INVÁLIDA. TENTE NOVAMENTE!")
 
 if __name__ == "__main__":
-    main()
+    main_carro()

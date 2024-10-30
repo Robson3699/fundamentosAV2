@@ -1,5 +1,6 @@
 import json
 import os
+import carro
 ##from time import sleep
 class cor:
     VERMELHO = '\033[91m'
@@ -137,7 +138,8 @@ def main_usuario():
 
         match (opcao_inicial):
             case 2:
-                print("MÓDULO EM DESENVOLVIMENTO")
+                carro.main_carro()
+                
 
             case 1:
                 while True: 
