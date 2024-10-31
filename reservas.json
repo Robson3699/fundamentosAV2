@@ -1,0 +1,12 @@
+[
+  {
+    "contador": 1
+  },
+  {
+    "idreserva": "0001",
+    "placa": "123",
+    "cpf": "099",
+    "dataaluguel": "213231",
+    "datadevolucao": "23123321"
+  }
+]

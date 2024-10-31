@@ -1,6 +1,7 @@
 import os
 import json
 import carro
+import usuario
 
 # variável com caminho do arquivo json
 arquivo = os.path.join(os.path.dirname(__file__), "reservas.json")
@@ -9,79 +10,119 @@ arquivo = os.path.join(os.path.dirname(__file__), "reservas.json")
 def load_reservas():
     if not os.path.exists(arquivo):
         with open(arquivo, "w") as file:
-            json.dump([], file, indent=2)
+            json.dump([{"contador":0}], file, indent=2)
 
     with open(arquivo, "r") as file:
         return json.load(file)
 
+def valida(vetor, valor, keyname): #verifica a existência do usuário ou carro dentro do json, retornando true caso exista
+    for elemento in vetor:
+        if elemento[keyname] == valor:
+            return True
+    
+    return False
+
+def filtra_reservas(vetor, valor, keyname, modeid):
+    novovetor=[]
+    for elemento in vetor:
+        if elemento[keyname] == valor:
+            novovetor.append(elemento)
+            if(modeid == True): #se operar com o modeid em True, deve parar a função assim que a primeira reserva for encontrada, pois cada reserva tem um id único
+                return novovetor
+
+    return novovetor
+
+
 def insere_reserva():
     data = load_reservas()
     carros = carro.carregar_veiculos()
-    switch = False
+    usuarios = usuario.carregar_usuarios()
 
-    id_reserva = f"{(len(data)+1):04d}" #retorna sempre um número com quatro caracteres
+
+    
     placa = input("Insira a placa do veículo ")
+    
+    switch = valida(carros, placa, "placa")
+    if (switch == False): 
+        print("ERRO! Carro não encontrado")
+        return None
+    
     cpf = input("Insira o CPF do cliente ")
+    
+    switch = valida(usuarios, cpf, "cpf")
+    if (switch == False): 
+        print("ERRO! Cliente não encontrado")
+        return None
+
     data_inicial = input("Insira a data do início de aluguel ")
     data_final = input("Insira a data do fim do aluguel ")
+    
+    data[0]["contador"]+=1
+    id_reserva = f"{(data[0]["contador"]):04d}" #retorna sempre um número com quatro caracteres
 
     reserva = {
-        "IdReserva": id_reserva,
-        "Placa": placa,
-        "CPF": cpf,
-        "DataAluguel": data_inicial,
-        "DataDevolucao": data_final,
-        "Ativo": True #será usado para esconder reservas canceladas
+        "idreserva": id_reserva,
+        "placa": placa,
+        "cpf": cpf,
+        "dataaluguel": data_inicial,
+        "datadevolucao": data_final,
+        
     }
 
-    for veiculo in carros:
-        if reserva["Placa"] == veiculo["placa"]:
-            switch = True
-
-    if (switch == True):
-        data.append(reserva)
-        with open(arquivo, "w") as file:
-            json.dump(data, file, indent=2)
-    else:
-        print("Erro! Veículo não encontrado")
+    
+    data.append(reserva)
+    with open(arquivo, "w") as file:
+        json.dump(data, file, indent=2)
+    
 
 def exibe_reservas():
     data = load_reservas()
-
-    print("1-Exibir reservas ativas")
-    print("2-Exibir reservas canceladas")
-    print("3-Exibir todas as reservas")
+    data.pop(0) #remove o contador de reservas
+    
+    print("1-Exibir todas as reservas")
+    print("2-Exibir reserva por ID da reserva")
+    print("3-Exibir reserva por cliente")
+    print("4-Exibir reserva por carro")
+    print("0-Retornar ao menu anterior")
     
     switch = int(input())
 
+    if (switch == 0):
+        return None
+    
     match (switch):
         case 1:
-            novovetor = []
-            for reserva in data:
-                if reserva["Ativo"] == True:
-                    novovetor.append(reserva)
-            if novovetor == []:
-                print("Não há reservas ativas")
-            else:
-                print("ID\tPlaca\tCPF\tReserva\tDevolução")
-                for reserva in novovetor:
-                    print(f"{reserva["IdReserva"]}\t{reserva["Placa"]}\t{reserva["CPF"]}\t{reserva["DataAluguel"]}\t{reserva["DataDevolucao"]}")
-        
-        case 2:
-            novovetor = []
-            for reserva in data:
-                if reserva["Ativo"] == False:
-                    novovetor.append(reserva)
-            if novovetor == []:
-                print("Não há reservas canceladas")
-            else:
-                print("ID\tPlaca\tCPF\tReserva\tDevolução")
-                for reserva in novovetor:
-                    print(f"{reserva["IdReserva"]}\t{reserva["Placa"]}\t{reserva["CPF"]}\t{reserva["DataAluguel"]}\t{reserva["DataDevolucao"]}")
-
-        case 3:
             print("ID\tPlaca\tCPF\tReserva\tDevolução")
             for reserva in data:
-                print(f"{reserva["IdReserva"]}\t{reserva["Placa"]}\t{reserva["CPF"]}\t{reserva["DataAluguel"]}\t{reserva["DataDevolucao"]}")
+                print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
 
-insere_reserva()
+        case 2:
+            id = input("Insira o ID da reserva: ")
+            data = filtra_reservas(data, id, "idreserva", True)
+            if(data==[]):
+                print("Reserva não encontrada")
+            else:
+                print("ID\tPlaca\tCPF\tReserva\tDevolução", False)
+                for reserva in data:
+                    print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+        case 3:
+            cpf = input("Insira o CPF do cliente: ")
+            data = filtra_reservas(data, cpf, "cpf", False)
+            if(data==[]):
+                print("Reserva não encontrada")
+            print("ID\tPlaca\tCPF\tReserva\tDevolução")
+            for reserva in data:
+                print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+        case 4:
+            placa = input("Insira a placa do carro: ")
+            data = filtra_reservas(data, placa, "placa", False)
+            if(data==[]):
+                print("Reserva não encontrada")
+            print("ID\tPlaca\tCPF\tReserva\tDevolução")
+            for reserva in data:
+                print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+        case _:
+            print("Comando inválido")
+        
+
+exibe_reservas()
