@@ -102,7 +102,7 @@ def exibe_reservas():
             if(data==[]):
                 print("Reserva não encontrada")
             else:
-                print("ID\tPlaca\tCPF\tReserva\tDevolução", False)
+                print("ID\tPlaca\tCPF\tReserva\tDevolução")
                 for reserva in data:
                     print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
         case 3:
@@ -124,5 +124,104 @@ def exibe_reservas():
         case _:
             print("Comando inválido")
         
+def atualiza_reserva():
+    data = load_reservas()
+    counter = data.pop(0) #remove o contador, lembre de inserir após atualizar
+    clientes = usuario.carregar_usuarios()
+    carros = carro.carregar_veiculos()
+    
+    reserva = input("Insira o número da reserva: ")
+    switch = valida(data, reserva, "idreserva")
+    
+    if (switch == False):
+        print("Reserva não encontrada")
+        return None
+    
+    for i in range(len(data)):
+        if data[i]["idreserva"] == reserva:
+            save_pos = i #salva a posição do elemento no vetor
+            break
+    
+    print("ID\tPlaca\tCPF\tReserva\tDevolução")
+    print(f"{data[save_pos]["idreserva"]}\t{data[save_pos]["placa"]}\t{data[save_pos]["cpf"]}\t{data[save_pos]["dataaluguel"]}\t{data[save_pos]["datadevolucao"]}")
 
-exibe_reservas()
+    # copia valores para comparacao e manipulação
+    placa = data[save_pos]["placa"]
+    cpf = data[save_pos]["cpf"]
+    nova_dataa = data[save_pos]["dataaluguel"]
+    nova_datad = data[save_pos]["datadevolucao"]
+
+    print("1 - Alterar placa")
+    print("2 - Alterar cpf")
+    print("3 - Alterar data de reserva")
+    print("4 - Alterar data de devolução")
+    opcao = input("Insira uma ou mais opções ")
+
+    if "1" in opcao:
+        print("Insira uma nova placa ")
+        while True:
+            placa = input ()
+            switch = valida (carros, placa, "placa")
+
+            if (placa.lower() == "sair"):
+                return None
+                
+            if (switch == True):
+                break
+            else :
+                print("Placa não encontrada.")
+                print("Insira uma nova placa ou escreva \"sair\" para sair")
+
+    if "2" in opcao:
+        print("Insira uma novo CPF ")
+        while True:
+            cpf = input ()
+            switch = valida (clientes, cpf, "cpf")
+
+            if (cpf.lower() == "sair"):
+                return None
+                
+            if (switch == True):
+                break
+            else :
+                print("CPF não encontrado.")
+                print("Insira um novo CPF ou escreva \"sair\" para sair")
+
+    if "3" in opcao:
+        nova_dataa = input("Insira uma nova data de reserva ")
+
+    if "4" in opcao:
+        nova_datad = input("Insira uma nova data de devolução ")
+
+    print("Antiga reserva:")
+    print("ID\tPlaca\tCPF\tReserva\tDevolução")
+    print(f"{data[save_pos]["idreserva"]}\t{data[save_pos]["placa"]}\t{data[save_pos]["cpf"]}\t{data[save_pos]["dataaluguel"]}\t{data[save_pos]["datadevolucao"]}")
+    print("\nNova reserva:")
+    print("ID\tPlaca\tCPF\tReserva\tDevolução")
+    print(f"{data[save_pos]["idreserva"]}\t{placa}\t{cpf}\t{nova_dataa}\t{nova_datad}")
+
+    switch = input("Confirma? [S/N]\n")
+
+    while True:
+        if switch not in ["S","s", "N", "n"]:
+            print("Comando Inválido")
+        else:
+            break
+
+    if (switch.lower() == "n"):
+        print("Operação cancelada!")
+    else :
+        print("Reserva atualizada!")
+        data[save_pos]["placa"] = placa
+        data[save_pos]["cpf"] = cpf
+        data[save_pos]["dataaluguel"] = nova_dataa
+        data[save_pos]["datadevolucao"] = nova_datad
+
+        data.insert(0,counter)
+
+        with open (arquivo, "w") as file:
+            json.dump(data, file, indent=2)
+
+    
+atualiza_reserva()
+
