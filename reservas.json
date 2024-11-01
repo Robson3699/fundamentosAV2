@@ -4,17 +4,10 @@
   },
   {
     "idreserva": "0001",
-    "placa": "123",
-    "cpf": "099",
-    "dataaluguel": "213231",
-    "datadevolucao": "23123321"
-  },
-  {
-    "idreserva": "0002",
-    "placa": "321",
-    "cpf": "099",
-    "dataaluguel": "213231",
-    "datadevolucao": "23123321"
+    "placa": "400",
+    "cpf": "1-3",
+    "dataaluguel": "01/11/2024",
+    "datadevolucao": "30/11/2024"
   },
   {
     "idreserva": "0003",

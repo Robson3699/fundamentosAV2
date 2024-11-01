@@ -6,6 +6,9 @@ import usuario
 # variável com caminho do arquivo json
 arquivo = os.path.join(os.path.dirname(__file__), "reservas.json")
 
+#não possui menu central chamar função por função
+
+
 #verifica se o arquivo json existe e joga arquivo json para dentro de uma variável
 def load_reservas():
     if not os.path.exists(arquivo):
@@ -217,11 +220,47 @@ def atualiza_reserva():
         data[save_pos]["dataaluguel"] = nova_dataa
         data[save_pos]["datadevolucao"] = nova_datad
 
-        data.insert(0,counter)
+        data.insert(0,counter) #reinsere o contador
 
         with open (arquivo, "w") as file:
             json.dump(data, file, indent=2)
 
+def deleta_reserva():
+    data = load_reservas()
+    counter = data.pop(0) #remove o contador de reservas e salva para ser reinserido
+    reserva = input("Insira o número da reserva: ")
     
-atualiza_reserva()
+    switch = valida(data, reserva, "idreserva")
 
+    if not switch:
+        print("Reserva não encontrada")
+        return None
+    
+    for i in range(len(data)):
+        if data[i]["idreserva"] == reserva:
+            save_pos = i #salva a posição do elemento no vetor
+            break
+    
+    print("Reserva encontrada:")
+    print("ID\tPlaca\tCPF\tReserva\tDevolução")
+    print(f"{data[save_pos]["idreserva"]}\t{data[save_pos]["placa"]}\t{data[save_pos]["cpf"]}\t{data[save_pos]["dataaluguel"]}\t{data[save_pos]["datadevolucao"]}")
+    
+    switch = input("Confirma? [S/N]\n")
+
+    while True:
+        if switch not in ["S","s", "N", "n"]:
+            print("Comando Inválido")
+        else:
+            break
+
+    if (switch.lower() == "n"):
+        print("Operação cancelada!")
+    else :
+        data.pop(save_pos)
+        data.insert(0, counter) #reinsere o contador
+        
+        with open (arquivo, "w") as file:
+            json.dump(data, file, indent=2)
+
+
+#não possui menu central chamar função por função
