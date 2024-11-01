@@ -1,6 +1,6 @@
 import json
 import os
-carros_json = 'carros.json'
+
 
 
 class cor:
@@ -132,12 +132,7 @@ def buscar_carro(placa=None, modelo=None):
 def linha_horizontal(cor):
     return cor + "=" * 50 + cor['RESET']
 
-def menu_inicial():
-    print(cor.CIANO + "=" *55 + cor.RESET)
-    print(cor.VERMELHO + " ---->>> BEM VINDO A PERDIDAS LOCADORA DE VEICULOS <<<---- ")
-    print("          1 - MÓDULO VEICULO ")
-    print("          3 - SAIR ")
-    print(cor.CIANO + "=" *55 + cor.RESET)
+
     
 def exibir_menu_veiculo():
     print("\nMENU:")
@@ -157,135 +152,120 @@ largura = 50
 
 
 def match_2():
-                            os.system('cls')
-                            print("=" * largura)
-                            print(centralizar_texto(cor.AMARELO+"ATUALIZANDO....:"+cor.RESET, largura ))
-                            print("=" * largura)
-                            placa = input("🚧 DIGITE A PLACA DO CARRO A SER ATUALIZADO:\n>>>")
-                            carros = carregar_veiculos()
-                        
-                            if not any(carro['placa'].lower() == placa.lower() for carro in carros):
-                                print("🚫 VEICULO NÃO ESTÁ CADASTRADO NA BASE DE DADOS")
-                                opc=input("APERTE ENTER PARA VOLTAR AO MENU INICIAL OU I PARA INSERIR NOVAMENTE A PLACA")
-                                if(opc=="enter"):
-                                    exibir_menu_veiculo()
-                                os.system('cls')    
-                                if(opc=="i" or opc=="I"):
-                                    match_2()
-                                    os.system('cls')
+    os.system('cls')
+    print("=" * largura)
+    print(centralizar_texto(cor.AMARELO+"ATUALIZANDO....:"+cor.RESET, largura ))
+    print("=" * largura)
+    placa = input("🚧 DIGITE A PLACA DO CARRO A SER ATUALIZADO:\n>>>")
+    carros = carregar_veiculos()
 
-                            
-                        
-                            else:    
-                                km_novo = input("⏱ DIGITE A NOVA KILOMETRAGEM:\n>>>")
-                                atualizar_carro(placa,km_novo)
-                                opc=input("APERTE ENTER PARA CONTINUAR")
-                                if(opc=="enter"):
-                                    exibir_menu_veiculo()
-                                os.system('cls')
+    if not any(carro['placa'].lower() == placa.lower() for carro in carros):
+        print("🚫 VEICULO NÃO ESTÁ CADASTRADO NA BASE DE DADOS")
+        opc=input("APERTE ENTER PARA VOLTAR AO MENU INICIAL OU I PARA INSERIR NOVAMENTE A PLACA: \n")
+        if(opc=="enter"):
+            exibir_menu_veiculo()
+        os.system('cls')    
+        if(opc=="i" or opc=="I"):
+            match_2()
+            os.system('cls')
+
+    
+
+    else:    
+        km_novo = input("⏱ DIGITE A NOVA KILOMETRAGEM:\n>>>")
+        atualizar_carro(placa,km_novo)
+        opc=input("APERTE ENTER PARA CONTINUAR: \n")
+        if(opc=="enter"):
+            exibir_menu_veiculo()
+        os.system('cls')
 
 
 def main_carro():
-    
-    while True:
-        menu_inicial()
-        opcao_inicial = int(input("INFORME UMA OPÇÃO: "))
-
-        match (opcao_inicial):
+     while True:  
+         exibir_menu_veiculo()
+         opcao = input("ESCOLHA UMA OPÇÃO:\n>>>")
+         match (opcao):
+                
+                
+                        
+            case '1':
+                os.system('cls')
+                print("=" * largura)
+                print(centralizar_texto(cor.VERDE+"ADICIONANDO UM VEICULO....:"+cor.RESET, largura ))
+                print("=" * largura)
+                
+                placa = input(" 🚧 DIGITE A PLACA:\n>>> ")
+                carros = carregar_veiculos()
+                
+                if any(carro['placa'].lower() == placa.lower() for carro in carros):
+                    print("🚫 Placa já cadastrada.")
+                    opc=input("APERTE ENTER PARA CONTINUAR")
+                    if(opc=="enter"):
+                        exibir_menu_veiculo()
+                    os.system('cls')
             
-
-            case 1:
-                while True: 
+                else:
+                    modelo = input(" 🦽 DIGITE O MODELO:\n>>> ").lower()
+                    kilometragem = input("⏱ DIGITE A KILOMETRAGEM ATUAL:\n>>> ")
+                    carregar_carros(placa, modelo, kilometragem)
+                
+                    opc=input("APERTE ENTER PARA CONTINUAR")
+                    if(opc=="enter"):
+                        exibir_menu_veiculo()
+                    os.system('cls')
+                        
+            case '4':
+                os.system('cls')
+                listar_carros()
+                
+                opc=input("APERTE ENTER PARA CONTINUAR")
+                if(opc=="enter"):
                     exibir_menu_veiculo()
-                    opcao = input("ESCOLHA UMA OPÇÃO:\n>>>")
-
-                    if opcao == "1":
-                        os.system('cls')
-                        print("=" * largura)
-                        print(centralizar_texto(cor.VERDE+"ADICIONANDO UM VEICULO....:"+cor.RESET, largura ))
-                        print("=" * largura)
-                        
-                        placa = input(" 🚧 DIGITE A PLACA:\n>>> ")
-                        carros = carregar_veiculos()
-                        
-                        if any(carro['placa'].lower() == placa.lower() for carro in carros):
-                            print("🚫 Placa já cadastrada.")
-                            opc=input("APERTE ENTER PARA CONTINUAR")
-                            if(opc=="enter"):
-                                exibir_menu_veiculo()
-                            os.system('cls')
-                       
-                        else:
-                            modelo = input(" 🦽 DIGITE O MODELO:\n>>> ").lower()
-                            kilometragem = input("⏱ DIGITE A KILOMETRAGEM ATUAL:\n>>> ")
-                            carregar_carros(placa, modelo, kilometragem)
-                           
-                            opc=input("APERTE ENTER PARA CONTINUAR")
-                            if(opc=="enter"):
-                                exibir_menu_veiculo()
-                            os.system('cls')
-                   
-                    elif opcao == "4":
-                        os.system('cls')
-                        listar_carros()
-                        
-                        opc=input("APERTE ENTER PARA CONTINUAR")
-                        if(opc=="enter"):
-                            exibir_menu_veiculo()
-                        os.system('cls')
-                    
-                    elif opcao == "2":
-                         match_2()
-                    
-                    elif opcao == "3":
-                        os.system('cls')
-                        placa = input("🛺 DIGITE A PLACA DO CARRO A SER EXCLUÍDO:\n>>>")
-                        excluir_carro(placa)
-                        
-
-                    elif opcao == "5":
-                        os.system('cls')
-                        print("=" * largura)
-                        print(centralizar_texto(cor.AZUL+"PROCURANDO VEICULO....:"+cor.RESET, largura ))
-                        print("=" * largura)
-                        placa = input("🦼 DIGITE A PLACA DO CARRO:\n>>>").lower()
-                        buscar_carro(placa)
-                        opc=input("APERTE ENTER PARA CONTINUAR")
-                        if(opc=="enter"):
+                os.system('cls')
                             
-                            exibir_menu_veiculo()
-                        os.system('cls')
-                    
-                    
-                    elif opcao == "6":
-                        os.system('cls')
-                        modelo = input("🦼 DIGITE O MODELO DO CARRO:\n>>>").lower()
-                        print("-" *50)
-                        print(f"{'Placa':<16}{'Modelo':<15}{'Kilometragem':<15}")
-                        print("-" * 50)
-                        buscar_carro(modelo=modelo)
-                        opc=input("APERTE ENTER PARA CONTINUAR")
-                        if(opc=="enter"):
+            case '2':
+                match_2()
                             
-                            exibir_menu_veiculo()
-                        os.system('cls')
-                        
-                        
+            case  '3':
+                os.system('cls')
+                placa = input("🛺 DIGITE A PLACA DO CARRO A SER EXCLUÍDO:\n>>>")
+                excluir_carro(placa)
+                
 
-                        
+            case '5':
+                os.system('cls')
+                print("=" * largura)
+                print(centralizar_texto(cor.AZUL+"PROCURANDO VEICULO....:"+cor.RESET, largura ))
+                print("=" * largura)
+                placa = input("🦼 DIGITE A PLACA DO CARRO:\n>>>").lower()
+                buscar_carro(placa)
+                opc=input("APERTE ENTER PARA CONTINUAR")
+                if(opc=="enter"):
                     
+                    exibir_menu_veiculo()
+                os.system('cls')
+            
+            
+            case  '6':
+                os.system('cls')
+                modelo = input("🦼 DIGITE O MODELO DO CARRO:\n>>>").lower()
+                print("-" *50)
+                print(f"{'Placa':<16}{'Modelo':<15}{'Kilometragem':<15}")
+                print("-" * 50)
+                buscar_carro(modelo=modelo)
+                opc=input("APERTE ENTER PARA CONTINUAR")
+                if(opc=="enter"):
                     
-                    
-                    elif opcao == "7":
-                        print("🐌 VOLTANDO AO MENU ANTERIOR...")
-                        break
-                    else:
-                        print("❌ OPÇÃO INVÁLIDA. TENTE NOVAMENTE!")
-            case 3:
+                    exibir_menu_veiculo()
+                os.system('cls')
+            case '7':
+                os.system('cls')
                 print("🏍 SAINDO...")
                 break
+               
             case __:
                 print("❌ OPÇÃO INVÁLIDA. TENTE NOVAMENTE!")
+
 
 if __name__ == "__main__":
     main_carro()
