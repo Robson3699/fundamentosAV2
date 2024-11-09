@@ -1,6 +1,11 @@
 [
     {
-        "placa": "ç",
+        "placa": "123",
+        "modelo": "m",
+        "kilometragem": "m"
+    },
+    {
+        "placa": "400",
         "modelo": "m",
         "kilometragem": "m"
     }

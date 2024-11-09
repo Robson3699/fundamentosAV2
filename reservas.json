@@ -1,0 +1,33 @@
+[
+  {
+    "contador": 6
+  },
+  {
+    "idreserva": "0001",
+    "placa": "400",
+    "cpf": "1-3",
+    "dataaluguel": "01/11/2024",
+    "datadevolucao": "30/11/2024"
+  },
+  {
+    "idreserva": "0003",
+    "placa": "123",
+    "cpf": "100",
+    "dataaluguel": "213231",
+    "datadevolucao": "23123321"
+  },
+  {
+    "idreserva": "0004",
+    "placa": "321",
+    "cpf": "100",
+    "dataaluguel": "213231",
+    "datadevolucao": "23123321"
+  },
+  {
+    "idreserva": "0005",
+    "placa": "123",
+    "cpf": "099",
+    "dataaluguel": "09/11/2024",
+    "datadevolucao": "30/11/2024"
+  }
+]
