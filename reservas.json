@@ -1,6 +1,6 @@
 [
   {
-    "contador": 4
+    "contador": 6
   },
   {
     "idreserva": "0001",
@@ -22,5 +22,12 @@
     "cpf": "100",
     "dataaluguel": "213231",
     "datadevolucao": "23123321"
+  },
+  {
+    "idreserva": "0005",
+    "placa": "123",
+    "cpf": "099",
+    "dataaluguel": "09/11/2024",
+    "datadevolucao": "30/11/2024"
   }
 ]

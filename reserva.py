@@ -3,10 +3,21 @@ import json
 import carro
 import usuario
 
+class cor:
+    PRETO = '\033[30m'
+    VERMELHO = '\033[31m'
+    VERDE = '\033[32m'
+    AMARELO = '\033[33m'
+    AZUL = '\033[34m'
+    MAGENTA = '\033[35m'
+    CIANO = '\033[36m'
+    BRANCO = '\033[37m'
+    RESET = '\033[0m'
+
+
 # variável com caminho do arquivo json
 arquivo = os.path.join(os.path.dirname(__file__), "reservas.json")
 
-#não possui menu central chamar função por função
 
 
 #verifica se o arquivo json existe e joga arquivo json para dentro de uma variável
@@ -35,30 +46,47 @@ def filtra_reservas(vetor, valor, keyname, modeid):
 
     return novovetor
 
+def menu_status(status):
+    print("=" *80)
+    print(f" ---------------------->>> {status} <<<---------------------- ")
+    print("=" *80)
+
 
 def insere_reserva():
     data = load_reservas()
     carros = carro.carregar_veiculos()
     usuarios = usuario.carregar_usuarios()
 
+    os.system("cls")
+    menu_status("INSERINDO RESERVA")
+    
+    placa = input("🚗Insira a placa do veículo\n")
+    
+    os.system("cls")
 
-    
-    placa = input("Insira a placa do veículo ")
-    
     switch = valida(carros, placa, "placa")
     if (switch == False): 
-        print("ERRO! Carro não encontrado")
+        print("🚫ERRO! Carro não encontrado")
+        opc = input("Pressione ENTER para continuar")
         return None
     
-    cpf = input("Insira o CPF do cliente ")
+    menu_status("INSERINDO RESERVA")
+    cpf = input("🧑Insira o CPF do cliente\n")
+
+    os.system("cls")
     
     switch = valida(usuarios, cpf, "cpf")
     if (switch == False): 
-        print("ERRO! Cliente não encontrado")
+        print("🚫ERRO! Cliente não encontrado")
+        opc = input("Pressione ENTER para continuar")
         return None
 
-    data_inicial = input("Insira a data do início de aluguel ")
-    data_final = input("Insira a data do fim do aluguel ")
+    menu_status("INSERINDO RESERVA")
+    data_inicial = input("Insira a data do início de aluguel\n")
+    os.system("cls")
+    menu_status("INSERINDO RESERVA")
+    data_final = input("Insira a data do fim do aluguel\n")
+    os.system("cls")
     
     data[0]["contador"]+=1
     id_reserva = f"{(data[0]["contador"]):04d}" #retorna sempre um número com quatro caracteres
@@ -76,12 +104,21 @@ def insere_reserva():
     data.append(reserva)
     with open(arquivo, "w") as file:
         json.dump(data, file, indent=2)
+
+    menu_status("✔  Reserva inserida com sucesso!")
+    print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+    print(f"{reserva["idreserva"]:<15}{reserva["placa"]:<15}{reserva["cpf"]:<15}{reserva["dataaluguel"]:<15}{reserva["datadevolucao"]:<15}")
+    opc = input("Pressione ENTER para continuar")
+    
+
     
 
 def exibe_reservas():
     data = load_reservas()
     data.pop(0) #remove o contador de reservas
     
+    os.system("cls")
+    menu_status("EXIBIR RESERVAS")
     print("1-Exibir todas as reservas")
     print("2-Exibir reserva por ID da reserva")
     print("3-Exibir reserva por cliente")
@@ -90,42 +127,73 @@ def exibe_reservas():
     
     switch = int(input())
 
+    os.system("cls")
+
     if (switch == 0):
         return None
     
     match (switch):
         case 1:
-            print("ID\tPlaca\tCPF\tReserva\tDevolução")
-            for reserva in data:
-                print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+           
+            if (data==[]):
+                print("=" *80)
+                print("🚫Não há reservas")
+                print("=" *80)
+            else:
+                    print("=" *80)
+                    print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+                    print("=" *80)
+                    for reserva in data:
+                        print(f"{reserva["idreserva"]:<15}{reserva["placa"]:<15}{reserva["cpf"]:<15}{reserva["dataaluguel"]:<15}{reserva["datadevolucao"]:<15}")
 
         case 2:
-            id = input("Insira o ID da reserva: ")
+            id = input("Insira o ID da reserva:\n")
             data = filtra_reservas(data, id, "idreserva", True)
+
+            os.system("cls")
             if(data==[]):
-                print("Reserva não encontrada")
+                print("=" *80)
+                print("🚫Reserva não encontrada")
+                print("=" *80)
             else:
-                print("ID\tPlaca\tCPF\tReserva\tDevolução")
+                print("=" *80)
+                print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+                print("=" *80)
                 for reserva in data:
-                    print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+                    print(f"{reserva["idreserva"]:<15}{reserva["placa"]:<15}{reserva["cpf"]:<15}{reserva["dataaluguel"]:<15}{reserva["datadevolucao"]:<15}")
         case 3:
-            cpf = input("Insira o CPF do cliente: ")
+            cpf = input("Insira o CPF do cliente:\n")
             data = filtra_reservas(data, cpf, "cpf", False)
+            
+            os.system("cls")
             if(data==[]):
-                print("Reserva não encontrada")
-            print("ID\tPlaca\tCPF\tReserva\tDevolução")
-            for reserva in data:
-                print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+                print("=" *80)
+                print("🚫Reserva não encontrada")
+                print("=" *80)
+            else:
+                print("=" *80)
+                print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+                print("=" *80)
+                for reserva in data:
+                    print(f"{reserva["idreserva"]:<15}{reserva["placa"]:<15}{reserva["cpf"]:<15}{reserva["dataaluguel"]:<15}{reserva["datadevolucao"]:<15}")
         case 4:
-            placa = input("Insira a placa do carro: ")
+            placa = input("Insira a placa do carro:\n")
             data = filtra_reservas(data, placa, "placa", False)
+            
+            os.system("cls")
             if(data==[]):
-                print("Reserva não encontrada")
-            print("ID\tPlaca\tCPF\tReserva\tDevolução")
-            for reserva in data:
-                print(f"{reserva["idreserva"]}\t{reserva["placa"]}\t{reserva["cpf"]}\t{reserva["dataaluguel"]}\t{reserva["datadevolucao"]}")
+                print("=" *80)
+                print("🚫Reserva não encontrada")
+                print("=" *80)
+            else:
+                print("=" *80)
+                print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+                print("=" *80)
+                for reserva in data:
+                    print(f"{reserva["idreserva"]:<15}{reserva["placa"]:<15}{reserva["cpf"]:<15}{reserva["dataaluguel"]:<15}{reserva["datadevolucao"]:<15}")
         case _:
-            print("Comando inválido")
+            print("🚫Comando inválido!")
+    opc = input("Pressione ENTER para continuar")
         
 def atualiza_reserva():
     data = load_reservas()
@@ -133,11 +201,16 @@ def atualiza_reserva():
     clientes = usuario.carregar_usuarios()
     carros = carro.carregar_veiculos()
     
-    reserva = input("Insira o número da reserva: ")
+    os.system("cls")
+    menu_status("ATUALIZAR RESERVA")
+    reserva = input("Insira o número da reserva:\n")
     switch = valida(data, reserva, "idreserva")
     
+    os.system("cls")
+
     if (switch == False):
-        print("Reserva não encontrada")
+        print("🚫Reserva não encontrada")
+        opc = input("Pressione ENTER para continuar")
         return None
     
     for i in range(len(data)):
@@ -145,8 +218,8 @@ def atualiza_reserva():
             save_pos = i #salva a posição do elemento no vetor
             break
     
-    print("ID\tPlaca\tCPF\tReserva\tDevolução")
-    print(f"{data[save_pos]["idreserva"]}\t{data[save_pos]["placa"]}\t{data[save_pos]["cpf"]}\t{data[save_pos]["dataaluguel"]}\t{data[save_pos]["datadevolucao"]}")
+    print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+    print(f"{data[save_pos]["idreserva"]:<15}{data[save_pos]["placa"]:<15}{data[save_pos]["cpf"]:<15}{data[save_pos]["dataaluguel"]:<15}{data[save_pos]["datadevolucao"]:<15}")
 
     # copia valores para comparacao e manipulação
     placa = data[save_pos]["placa"]
@@ -154,14 +227,18 @@ def atualiza_reserva():
     nova_dataa = data[save_pos]["dataaluguel"]
     nova_datad = data[save_pos]["datadevolucao"]
 
+    menu_status("ATUALIZANDO RESERVA")
+
     print("1 - Alterar placa")
     print("2 - Alterar cpf")
     print("3 - Alterar data de reserva")
     print("4 - Alterar data de devolução")
-    opcao = input("Insira uma ou mais opções ")
+    opcao = input("Insira uma ou mais opções\n")
 
+    os.system("cls")
     if "1" in opcao:
-        print("Insira uma nova placa ")
+        menu_status("ATUALIZANDO RESERVA")
+        print("Insira uma nova placa\n")
         while True:
             placa = input ()
             switch = valida (carros, placa, "placa")
@@ -172,11 +249,17 @@ def atualiza_reserva():
             if (switch == True):
                 break
             else :
-                print("Placa não encontrada.")
+                os.system("cls")
+                menu_status("ATUALIZANDO RESERVA")
+                print("🚫Placa não encontrada.")
                 print("Insira uma nova placa ou escreva \"sair\" para sair")
+            
+        
 
+    os.system("cls")
     if "2" in opcao:
-        print("Insira uma novo CPF ")
+        menu_status("ATUALIZANDO RESERVA")
+        print("Insira uma novo CPF\n")
         while True:
             cpf = input ()
             switch = valida (clientes, cpf, "cpf")
@@ -187,34 +270,50 @@ def atualiza_reserva():
             if (switch == True):
                 break
             else :
-                print("CPF não encontrado.")
+                os.system("cls")
+                menu_status("ATUALIZANDO RESERVA")
+                print("🚫CPF não encontrado.")
                 print("Insira um novo CPF ou escreva \"sair\" para sair")
-
+            
+    
+    os.system("cls")
     if "3" in opcao:
-        nova_dataa = input("Insira uma nova data de reserva ")
+        menu_status("ATUALIZANDO RESERVA")
+        nova_dataa = input("Insira uma nova data de reserva\n")
 
+    os.system("cls")
     if "4" in opcao:
-        nova_datad = input("Insira uma nova data de devolução ")
-
+        menu_status("ATUALIZANDO RESERVA")
+        nova_datad = input("Insira uma nova data de devolução\n")
+    
+    os.system("cls")
+    menu_status("ATUALIZANDO RESERVA")
+    
     print("Antiga reserva:")
-    print("ID\tPlaca\tCPF\tReserva\tDevolução")
-    print(f"{data[save_pos]["idreserva"]}\t{data[save_pos]["placa"]}\t{data[save_pos]["cpf"]}\t{data[save_pos]["dataaluguel"]}\t{data[save_pos]["datadevolucao"]}")
-    print("\nNova reserva:")
-    print("ID\tPlaca\tCPF\tReserva\tDevolução")
-    print(f"{data[save_pos]["idreserva"]}\t{placa}\t{cpf}\t{nova_dataa}\t{nova_datad}")
+    print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+    print(f"{data[save_pos]["idreserva"]:<15}{data[save_pos]["placa"]:<15}{data[save_pos]["cpf"]:<15}{data[save_pos]["dataaluguel"]:<15}{data[save_pos]["datadevolucao"]:<15}")
+    print("=" *80)
+    print("Nova reserva:")
+    print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+    print(f"{data[save_pos]["idreserva"]:<15}{placa:<15}{cpf:<15}{nova_dataa:<15}{nova_datad:<15}")
 
     switch = input("Confirma? [S/N]\n")
-
+    
+    os.system("cls")
     while True:
         if switch not in ["S","s", "N", "n"]:
             print("Comando Inválido")
         else:
             break
+        switch = input("Confirma? [S/N]\n")
+        os.system("cls")
+
+    os.system("cls")
 
     if (switch.lower() == "n"):
-        print("Operação cancelada!")
+        menu_status("🚫Operação cancelada!")
     else :
-        print("Reserva atualizada!")
+        menu_status("✔  Reserva atualizada!")
         data[save_pos]["placa"] = placa
         data[save_pos]["cpf"] = cpf
         data[save_pos]["dataaluguel"] = nova_dataa
@@ -224,16 +323,23 @@ def atualiza_reserva():
 
         with open (arquivo, "w") as file:
             json.dump(data, file, indent=2)
+    opc = input("Pressione ENTER para continuar")
+    
 
 def deleta_reserva():
     data = load_reservas()
     counter = data.pop(0) #remove o contador de reservas e salva para ser reinserido
-    reserva = input("Insira o número da reserva: ")
+    
+    os.system("cls")
+    menu_status("DELETAR RESERVA")
+    reserva = input("Insira o número da reserva:\n")
     
     switch = valida(data, reserva, "idreserva")
-
+    os.system("cls")
+    
     if not switch:
-        print("Reserva não encontrada")
+        print("🚫Reserva não encontrada")
+        opc = input("Pressione ENTER para continuar")
         return None
     
     for i in range(len(data)):
@@ -241,26 +347,58 @@ def deleta_reserva():
             save_pos = i #salva a posição do elemento no vetor
             break
     
+    menu_status("DELETAR RESERVA")
     print("Reserva encontrada:")
-    print("ID\tPlaca\tCPF\tReserva\tDevolução")
-    print(f"{data[save_pos]["idreserva"]}\t{data[save_pos]["placa"]}\t{data[save_pos]["cpf"]}\t{data[save_pos]["dataaluguel"]}\t{data[save_pos]["datadevolucao"]}")
+    print(f"{"ID":<15}{"Placa":<15}{"CPF":<15}{"Reserva":<15}{"Devolução":<15}")
+    print(f"{data[save_pos]["idreserva"]:<15}{data[save_pos]["placa"]:<15}{data[save_pos]["cpf"]:<15}{data[save_pos]["dataaluguel"]:<15}{data[save_pos]["datadevolucao"]:<15}")
     
     switch = input("Confirma? [S/N]\n")
 
+    os.system("cls")
     while True:
         if switch not in ["S","s", "N", "n"]:
             print("Comando Inválido")
         else:
             break
+        switch = input("Confirma? [S/N]\n")
+        os.system("cls")
 
+    os.system("cls")
     if (switch.lower() == "n"):
-        print("Operação cancelada!")
+        menu_status("🚫Operação cancelada!")
     else :
         data.pop(save_pos)
         data.insert(0, counter) #reinsere o contador
+        menu_status("✔  Reserva deletada")
         
         with open (arquivo, "w") as file:
             json.dump(data, file, indent=2)
+    opc = input("Pressione ENTER para continuar")
+
+def main_reserva():
+    while True:
+        os.system('cls')
+        print(cor.CIANO + "=" *80 + cor.RESET)
+        print(cor.VERMELHO + " ---------------------->>> MÓDULO RESERVAS <<<---------------------- ")
+        print("          1 - LISTAR RESERVAS ")
+        print("          2 - INSERIR RESERVAS ")
+        print("          3 - ATUALIZAR RESERVAS ")
+        print("          4 - REMOVER RESERVAS ")
+        print("          5 - SAIR ")
+        print(cor.CIANO + "=" *80 + cor.RESET)
+
+        opc = int(input())
+
+        match (opc):
+            case 1:
+                exibe_reservas()
+            case 2:
+                insere_reserva()
+            case 3:
+                atualiza_reserva()
+            case 4:
+                deleta_reserva()
+            case 5:
+                break
 
 
-#não possui menu central chamar função por função
